@@ -12,7 +12,7 @@ const cats = [
   "Sides",
   "Cocktails",
   "Coffee",
-  "Drimks",
+  "Drinks",
   "Desserts",
 ];
 
@@ -32,7 +32,7 @@ export const Categories: React.FC<Props> = ({ className }) => {
           )}
           key={cat}
         >
-          <button></button>
+          <button>{cat}</button>
         </a>
       ))}
     </div>
