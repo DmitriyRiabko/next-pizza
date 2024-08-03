@@ -1,5 +1,7 @@
+'use client'
+
 import React from "react";
-import { Title } from ".";
+import { CheckboxFilterGroup, Title } from ".";
 import { FilterCheckbox } from "./filter-checkbox";
 import { Input } from "../ui/input";
 import { RangeSlider } from "./range-slider";
@@ -30,7 +32,14 @@ export const Filters: React.FC<Props> = ({ className }) => {
         </div>
         <RangeSlider min={0} max={40} step={1} value={[0,40]}/>
       </div>
-      
+      <CheckboxFilterGroup 
+      searchInputPlaceholder="Search..."
+      title={"Ingridients"} 
+      className="mt-5"
+      limit={6}
+      items={new Array(10)}
+      defaultItems={[]}
+      />
     </div>
   );
 };
