@@ -1,0 +1,99 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider  = "postgresql"
+    url       = env("POSTGRES_URL")
+    directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+    id       Int    @id @default(autoincrement())
+    fullName String
+    email    String @unique
+    password String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    cartId Int
+    Cart   Cart[]
+}
+
+model Category {
+    id      Int       @id @default(autoincrement())
+    name    String    @unique
+    product Product[]
+}
+
+model Product {
+    id Int @id @default(autoincrement())
+
+    name     String
+    imageUrl String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    ingredients Ingredient[]
+    items       ProductItem[]
+
+    category   Category @relation(fields: [categoryId], references: [id])
+    categoryId Int
+}
+
+model ProductItem {
+    id        Int     @id @default(autoincrement())
+    price     Int
+    size      Int?
+    pizzaType String?
+
+    products  Product    @relation(fields: [productId], references: [id])
+    productId Int
+    CartItem  CartItem[]
+}
+
+model Ingredient {
+    id       Int    @id @default(autoincrement())
+    name     String
+    price    Int
+    imageUrl String
+
+    products Product[]
+    CartItem CartItem[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Cart {
+    id Int @id @default(autoincrement())
+
+    user   User? @relation(fields: [userId], references: [id])
+    userId Int
+
+    token String
+
+    totalAmount Int @default(0)
+
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+    CartItem  CartItem[]
+}
+
+model CartItem {
+    id Int @id @default(autoincrement())
+
+    product       ProductItem @relation(fields: [productItemId], references: [id])
+    productItemId Int
+
+    cart   Cart @relation(fields: [cartId], references: [id])
+    cartId Int
+
+    quantity    Int
+    ingredients Ingredient[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
