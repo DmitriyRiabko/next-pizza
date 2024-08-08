@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import { useCategoryStore } from "@/store/category.store";
-import Link from "next/link";
 import React from "react";
 
 interface Props {
