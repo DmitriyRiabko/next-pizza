@@ -1,16 +1,24 @@
-'use client'
+"use client";
 
 import React from "react";
 import { CheckboxFilterGroup, Title } from ".";
 import { FilterCheckbox } from "./filter-checkbox";
 import { Input } from "../ui/input";
 import { RangeSlider } from "./range-slider";
+import { useFilterIngredients } from "@/hooks/useFilterIngredients";
 
 interface Props {
   className?: string;
 }
 
 export const Filters: React.FC<Props> = ({ className }) => {
+  const { ingredients, isLoading } = useFilterIngredients();
+
+  const items = ingredients?.map((item) => ({
+    value: String(item.id),
+    text: item.name,
+  }));
+
   return (
     <div className={className}>
       <Title text="Filters" size="sm" className="mb-5 font-bold" />
@@ -30,15 +38,16 @@ export const Filters: React.FC<Props> = ({ className }) => {
           />
           <Input type="number" min={100} max={40} placeholder="400" />
         </div>
-        <RangeSlider min={0} max={40} step={1} value={[0,40]}/>
+        <RangeSlider min={0} max={40} step={1} value={[0, 40]} />
       </div>
-      <CheckboxFilterGroup 
-      searchInputPlaceholder="Search..."
-      title={"Ingridients"} 
-      className="mt-5"
-      limit={6}
-      items={new Array(10)}
-      defaultItems={[]}
+      <CheckboxFilterGroup
+        searchInputPlaceholder="Search..."
+        title={"Ingridients"}
+        className="mt-5"
+        limit={6}
+        items={items}
+        defaultItems={items?.slice(0, 6)}
+        loading={isLoading}
       />
     </div>
   );
