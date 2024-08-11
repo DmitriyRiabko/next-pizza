@@ -1,6 +1,6 @@
 "use client";
 
-import React, { InputHTMLAttributes } from "react";
+import React from "react";
 import { cn } from "@/lib/utils";
 import { FilterChecboxProps, FilterCheckbox } from "./filter-checkbox";
 import { Input } from "../ui/input";
@@ -11,12 +11,14 @@ type Item = FilterChecboxProps;
 interface Props {
   title: string;
   items: Item[];
-  defaultItems: Item[];
+  defaultItems?: Item[];
   limit?: number;
   searchInputPlaceholder?: string;
   defaultValue?: string[];
   className?: string;
   loading?: boolean;
+  selected?: Set<string>;
+  name?: string;
   onClickCheckbox?: (id: string) => void;
 }
 
@@ -28,7 +30,9 @@ export const CheckboxFilterGroup: React.FC<Props> = ({
   searchInputPlaceholder,
   className,
   onClickCheckbox,
+  selected,
   defaultValue,
+  name,
   loading,
 }) => {
   const [showAll, setShowAll] = React.useState(false);
@@ -39,18 +43,19 @@ export const CheckboxFilterGroup: React.FC<Props> = ({
       <div className={className}>
         <p className="font-bold mb-5">Loading...</p>
 
-        {new Array(limit).fill(null).map((item, index) => (
+        {new Array(limit).map((item, index) => (
           <Skeleton key={index} className="h-6 mb-5 rounded-[8px]" />
         ))}
       </div>
     );
   }
 
+
   const list = showAll
     ? items.filter((item) =>
         item.text.toLowerCase().includes(searchValue.toLowerCase())
       )
-    : defaultItems?.slice(0, limit);
+    : (defaultItems || items).slice(0, limit);
 
   const handleSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -75,8 +80,9 @@ export const CheckboxFilterGroup: React.FC<Props> = ({
             text={item.text}
             value={item.value}
             endAdornment={item.endAdornment}
-            checked={false}
+            checked={selected?.has(item.value)}
             onCheckedChange={() => onClickCheckbox?.(item.value)}
+            name={item.name}
           />
         ))}
       </div>

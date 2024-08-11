@@ -6,15 +6,17 @@ import { useSet } from "react-use";
 interface ReturnProps {
   ingredients: Ingredient[];
   isLoading?: boolean;
+  selectedIds: Set<string>;
+  onAddId: (id: string) => void;
 }
 
 export const useFilterIngredients = (): ReturnProps => {
-  const [set, { toggle }] = useSet(new Set<string>([]));
+  const [selectedIds, { toggle }] = useSet(new Set<string>([]));
 
   const { data: ingredients, isLoading } = useQuery({
     queryKey: ["getIngredients"],
     queryFn: () => Api.ingredients.getAll(),
   });
 
-  return { ingredients, isLoading };
+  return { ingredients, isLoading, onAddId: toggle, selectedIds };
 };
