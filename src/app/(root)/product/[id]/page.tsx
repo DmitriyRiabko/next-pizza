@@ -36,7 +36,6 @@ export default async function ProductPage({
             Lorem ipsum dolor sit amet, consectetur
           </p>
           <GroupVariants
-          selectedValue="1"
             items={[
               {
                 name: "Small",
